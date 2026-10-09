@@ -158,19 +158,20 @@ export const Login = () => {
             </button>
             <button
               type="button"
-              onClick={() => handleQuickLogin('admin@aureliaresort.com', 'Admin123!')}
+              onClick={() => handleQuickLogin('harishravi1006@gmain.com', 'chandru@2007')}
               style={{
                 flex: 1,
-                background: 'rgba(212, 175, 55, 0.08)',
-                border: '1px solid rgba(212, 175, 55, 0.25)',
+                background: 'rgba(212, 175, 55, 0.12)',
+                border: '1px solid rgba(212, 175, 55, 0.4)',
                 borderRadius: '8px',
                 padding: '8px',
                 color: 'var(--gold-300)',
                 fontSize: '0.72rem',
                 cursor: 'pointer',
+                fontWeight: 600,
               }}
             >
-              Admin Concierge
+              Imperial Admin (Harish)
             </button>
           </div>
         </div>

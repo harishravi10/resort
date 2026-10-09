@@ -51,6 +51,99 @@ export const UserDashboard = () => {
 
   const displayName = user ? user.name : 'Harish Kumar';
 
+  // Security Guard: Guest must be logged in to view their stay portfolio
+  if (!user) {
+    return (
+      <div
+        style={{
+          paddingTop: '160px',
+          paddingBottom: '100px',
+          minHeight: '100vh',
+          background: 'radial-gradient(circle at 50% 20%, #0d2820 0%, #05110d 80%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          className="glass-panel"
+          style={{
+            maxWidth: '500px',
+            width: '90%',
+            padding: '44px 32px',
+            textAlign: 'center',
+            borderRadius: '24px',
+            border: '1px solid rgba(212, 175, 55, 0.4)',
+            background: 'rgba(7, 20, 16, 0.96)',
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9)',
+          }}
+        >
+          <div
+            style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              background: 'rgba(212, 175, 55, 0.15)',
+              border: '1px solid rgba(212, 175, 55, 0.4)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}
+          >
+            <User size={26} color="#D4AF37" />
+          </div>
+
+          <span className="tagline-badge" style={{ marginBottom: '12px' }}>
+            <Sparkles size={12} color="#D4AF37" />
+            RESIDENT SIGN-IN REQUIRED
+          </span>
+
+          <h2
+            style={{
+              fontFamily: 'Cinzel, Georgia, serif',
+              fontSize: '1.7rem',
+              color: '#fff',
+              marginBottom: '10px',
+            }}
+          >
+            Access Your Stay Portfolio
+          </h2>
+
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: '0.88rem',
+              lineHeight: 1.6,
+              marginBottom: '26px',
+            }}
+          >
+            Please sign in to view your confirmed villa reservations, upcoming seaplane arrival schedules, and sovereign resident privileges.
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <button
+              onClick={() => navigate('/login')}
+              className="btn-gold"
+              data-cursor="LOGIN"
+              style={{ width: '100%', padding: '14px', fontSize: '0.82rem' }}
+            >
+              Sign In to Portfolio
+            </button>
+            <button
+              onClick={() => navigate('/register')}
+              className="btn-outline-gold"
+              data-cursor="REGISTER"
+              style={{ width: '100%', padding: '12px', fontSize: '0.8rem' }}
+            >
+              Enroll as New Sovereign Member
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ paddingTop: '120px', minHeight: '100vh', background: '#05110d' }}>
       <div className="container" style={{ paddingBottom: '90px' }}>

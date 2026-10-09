@@ -471,9 +471,9 @@ export const INITIAL_BOOKINGS = [
 export const INITIAL_USERS = [
   {
     id: "a0000000-0000-0000-0000-000000000001",
-    name: "Admin Concierge",
-    email: "admin@aureliaresort.com",
-    phone: "+91 98765 43210",
+    name: "Harish Ravi",
+    email: "harishravi1006@gmain.com",
+    phone: "+91 99887 76655",
     role: "ADMIN",
     tier: "Imperial Admin",
     createdAt: "2026-01-01T00:00:00Z",

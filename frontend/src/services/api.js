@@ -318,29 +318,67 @@ export const apiService = {
     } catch (e) {
       // Fallback mock login
     }
-    
-    // Default demo accounts
-    let user = {
-      id: "a0000000-0000-0000-0000-000000000002",
-      name: "Harish Kumar",
+
+    const cleanEmail = (email || '').trim().toLowerCase();
+    const cleanPassword = (password || '').trim();
+
+    // Check Sovereign Admin credentials
+    const isPrimaryAdmin = cleanEmail === 'harishravi1006@gmain.com' || cleanEmail === 'harishravi1006@gmail.com';
+    const isLegacyAdmin = cleanEmail === 'admin@aureliaresort.com';
+
+    if (isPrimaryAdmin) {
+      if (cleanPassword !== 'chandru@2007') {
+        throw new Error('Invalid sovereign admin password. Imperial clearance denied.');
+      }
+      const adminUser = {
+        id: "a0000000-0000-0000-0000-000000000001",
+        name: "Harish Ravi",
+        email: email,
+        phone: "+91 99887 76655",
+        role: "ADMIN",
+        tier: "Imperial Admin",
+        token: `mock_jwt_admin_token_${Date.now()}`
+      };
+      localStorage.setItem('aurelia_jwt_token', adminUser.token);
+      localStorage.setItem('aurelia_user', JSON.stringify(adminUser));
+      return adminUser;
+    }
+
+    if (isLegacyAdmin) {
+      if (cleanPassword !== 'chandru@2007' && cleanPassword !== 'Admin123!') {
+        throw new Error('Invalid credentials for Admin Concierge.');
+      }
+      const adminUser = {
+        id: "a0000000-0000-0000-0000-000000000001",
+        name: "Harish Ravi",
+        email: email,
+        phone: "+91 99887 76655",
+        role: "ADMIN",
+        tier: "Imperial Admin",
+        token: `mock_jwt_admin_token_${Date.now()}`
+      };
+      localStorage.setItem('aurelia_jwt_token', adminUser.token);
+      localStorage.setItem('aurelia_user', JSON.stringify(adminUser));
+      return adminUser;
+    }
+
+    // Regular Guest Account authentication (strictly non-admin)
+    const users = getLocalData('users', INITIAL_USERS);
+    const existing = users.find(u => u.email.toLowerCase() === cleanEmail);
+
+    const guestUser = {
+      id: existing ? existing.id : `u0000000-${Date.now().toString().slice(-8)}`,
+      name: existing ? existing.name : (email.split('@')[0] || 'Resort Guest'),
       email: email,
-      role: email.toLowerCase().includes("admin") ? "ADMIN" : "USER",
+      phone: existing ? existing.phone : '+91 98765 00000',
+      role: "USER",
+      tier: existing ? existing.tier : "Sovereign Resident",
       token: `mock_jwt_token_${Date.now()}`
     };
 
-    if (email === "admin@aureliaresort.com") {
-      user = {
-        id: "a0000000-0000-0000-0000-000000000001",
-        name: "Admin Concierge",
-        email: "admin@aureliaresort.com",
-        role: "ADMIN",
-        token: `mock_jwt_admin_token_${Date.now()}`
-      };
-    }
-
-    localStorage.setItem('aurelia_jwt_token', user.token);
-    localStorage.setItem('aurelia_user', JSON.stringify(user));
-    return user;
+    localStorage.setItem('aurelia_jwt_token', guestUser.token);
+    localStorage.setItem('aurelia_user', JSON.stringify(guestUser));
+    return guestUser;
   },
 
   async register(name, email, phone, password) {

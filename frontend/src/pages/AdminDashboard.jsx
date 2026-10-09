@@ -24,7 +24,8 @@ import {
   UserCheck,
   X,
   Clock,
-  FileText
+  FileText,
+  Lock
 } from 'lucide-react';
 import { INITIAL_ROOMS } from '../services/mockData';
 
@@ -54,10 +55,14 @@ export const AdminDashboard = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    loadAllData();
-  }, []);
+    if (user && isAdmin) {
+      loadAllData();
+    }
+  }, [user, isAdmin]);
 
   const loadAllData = async () => {
+    if (!user || !isAdmin) return; // Prevent unauthorized data loading
+
     const s = await apiService.getDashboardStats();
     setStats(s);
 
@@ -89,6 +94,101 @@ export const AdminDashboard = () => {
     await apiService.updateBookingStatus(id, newStatus);
     loadAllData();
   };
+
+  // ================= SECURITY ACCESS GUARD =================
+  if (!user || !isAdmin) {
+    return (
+      <div
+        style={{
+          paddingTop: '160px',
+          paddingBottom: '100px',
+          minHeight: '100vh',
+          background: 'radial-gradient(circle at 50% 20%, #0d2820 0%, #05110d 80%)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          className="glass-panel"
+          style={{
+            maxWidth: '520px',
+            width: '90%',
+            padding: '48px 36px',
+            textAlign: 'center',
+            borderRadius: '24px',
+            border: '1px solid rgba(212, 175, 55, 0.4)',
+            background: 'rgba(7, 20, 16, 0.96)',
+            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9)',
+          }}
+        >
+          <div
+            style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '50%',
+              background: 'rgba(239, 68, 68, 0.15)',
+              border: '1px solid #ef4444',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}
+          >
+            <Lock size={28} color="#ef4444" />
+          </div>
+
+          <span className="tagline-badge" style={{ marginBottom: '14px' }}>
+            <Shield size={12} color="#D4AF37" />
+            CONFIDENTIAL SANCTUARY DATA
+          </span>
+
+          <h2
+            style={{
+              fontFamily: 'Cinzel, Georgia, serif',
+              fontSize: '1.8rem',
+              color: '#fff',
+              marginBottom: '12px',
+            }}
+          >
+            Imperial Admin Access Only
+          </h2>
+
+          <p
+            style={{
+              color: 'var(--text-secondary)',
+              fontSize: '0.9rem',
+              lineHeight: 1.6,
+              marginBottom: '28px',
+            }}
+          >
+            {user
+              ? `You are currently authenticated as "${user.name}" (${user.email} • Role: ${user.role}). Only the Imperial Administrator (harishravi1006@gmain.com) is authorized to inspect private guest records, financial revenue, and booking operations.`
+              : 'This operations console contains confidential resort revenue, private guest contact profiles, and live booking itineraries. Please sign in with Imperial Administrator credentials to proceed.'}
+          </p>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <button
+              onClick={() => navigate('/login')}
+              className="btn-gold"
+              data-cursor="SIGN IN"
+              style={{ width: '100%', padding: '14px', fontSize: '0.82rem' }}
+            >
+              Sign In as Imperial Admin
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="btn-outline-gold"
+              data-cursor="BACK"
+              style={{ width: '100%', padding: '12px', fontSize: '0.8rem' }}
+            >
+              Return to Resort
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ paddingTop: '120px', minHeight: '100vh', background: '#05110d' }}>
